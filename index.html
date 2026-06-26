@@ -8,18 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-    
+   
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap');
-        
+       
         body { font-family: 'Inter', sans-serif; }
         .logo-font { font-family: 'Playfair Display', serif; }
-
         .hero-bg {
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), 
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)),
                         url('https://i.ibb.co/YBNkz2Zh/black-white-icon-hooded-man-260nw-2631452863.webp') center/cover no-repeat;
         }
-
         .product-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -27,7 +25,6 @@
             transform: translateY(-15px) scale(1.03);
             box-shadow: 0 30px 60px -15px rgb(167, 139, 250);
         }
-
         .product-img {
             transition: transform 0.4s ease;
             cursor: pointer;
@@ -38,7 +35,6 @@
     </style>
 </head>
 <body class="bg-zinc-950 text-gray-200">
-
     <!-- HEADER -->
     <header class="bg-zinc-900/90 backdrop-blur-lg border-b border-zinc-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
@@ -49,14 +45,13 @@
                     <p class="text-xs text-violet-400 -mt-1">PREMIUM • EXCLUSIVO</p>
                 </div>
             </div>
-            
+           
             <nav class="hidden md:flex items-center gap-10 text-lg font-medium">
                 <a href="#home" class="hover:text-violet-400 transition">Início</a>
                 <a href="#produtos" class="hover:text-violet-400 transition">Produtos</a>
                 <a href="#sobre" class="hover:text-violet-400 transition">Sobre</a>
                 <a href="#pedidos" class="hover:text-violet-400 transition">Fazer Pedido</a>
             </nav>
-
             <button onclick="toggleCart()" class="relative p-3 hover:bg-zinc-800 rounded-2xl transition">
                 <i class="fa-solid fa-shopping-cart text-2xl text-violet-400"></i>
                 <span id="cart-count" class="absolute -top-1 -right-1 bg-violet-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
@@ -64,10 +59,93 @@
         </div>
     </header>
 
-    <!-- HERO, PRODUTOS, FORMULÁRIO e FOOTER (mantidos iguais) -->
-    <!-- ... (todo o HTML anterior continua igual) ... -->
+    <!-- HERO -->
+    <section id="home" class="hero-bg h-screen flex items-center text-white relative">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-6xl md:text-7xl font-bold mb-6 leading-tight tracking-tighter">
+                    Qualidade que você<br>vai sentir na hora
+                </h2>
+                <p class="text-xl md:text-2xl mb-10 text-gray-300">Produtos premium com entrega discreta e rápida</p>
+                <a href="#produtos" class="bg-white text-zinc-900 px-12 py-6 rounded-3xl text-xl font-semibold hover:scale-105 transition inline-flex items-center gap-3">
+                    Explorar Produtos <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
 
-    <!-- CARRINHO MODAL (mantido) -->
+    <!-- PRODUTOS -->
+    <section id="produtos" class="py-24 bg-zinc-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold text-white mb-4">Nossos Produtos</h2>
+                <p class="text-violet-400 text-lg">Clique na foto do produto para adicionar ao carrinho</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-3xl font-semibold mb-10 flex items-center gap-3"><span class="text-4xl">🌿</span> Linha Premium</h3>
+                    <div class="grid grid-cols-1 gap-8" id="flores-list"></div>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-semibold mb-10 flex items-center gap-3"><span class="text-4xl">⭐</span> Especiais</h3>
+                    <div class="grid grid-cols-1 gap-8" id="pudins-list"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMULÁRIO DE PEDIDO -->
+    <section id="pedidos" class="py-24 bg-zinc-900">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="bg-zinc-950 rounded-3xl shadow-2xl p-12 border border-zinc-800">
+                <h2 class="text-5xl font-bold text-center mb-12 text-white">Informações da Entrega</h2>
+               
+                <form id="order-form" onsubmit="enviarPedido(event)">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2 text-gray-300">Nome Completo</label>
+                            <input type="text" id="nome" required class="w-full px-6 py-5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-violet-500 outline-none text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2 text-gray-300">WhatsApp</label>
+                            <input type="tel" id="whatsapp" required placeholder="(11) 98765-4321" class="w-full px-6 py-5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-violet-500 outline-none text-white">
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium mb-2 text-gray-300">Endereço Completo para Entrega</label>
+                        <input type="text" id="endereco" required placeholder="Rua, número, bairro, cidade"
+                               class="w-full px-6 py-5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-violet-500 outline-none text-white">
+                    </div>
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium mb-2 text-gray-300">Observações / Personalização</label>
+                        <textarea id="personalizacao" rows="4" placeholder="Ex: Deixar na portaria, ligar antes de chegar..."
+                                  class="w-full px-6 py-5 bg-zinc-900 border border-zinc-700 rounded-2xl focus:border-violet-500 outline-none text-white resize-y"></textarea>
+                    </div>
+                    <div class="mt-10">
+                        <label class="block text-sm font-medium mb-4 text-gray-300">Itens do Pedido</label>
+                        <div id="cart-items" class="min-h-[180px] border border-dashed border-zinc-700 rounded-3xl p-8 bg-zinc-900"></div>
+                    </div>
+                    <div class="flex justify-between items-center text-3xl font-bold mt-10 mb-10">
+                        <span class="text-gray-400">Total do Pedido</span>
+                        <span id="total-price" class="text-violet-400">R$ 0,00</span>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white py-7 rounded-3xl text-2xl font-bold hover:brightness-110 transition shadow-xl">
+                        Confirmar Pedido e Finalizar <i class="fa-solid fa-arrow-right ml-3"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-16 border-t border-zinc-900">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-3xl font-medium text-white">exemplo</p>
+            <p class="text-zinc-500 mt-4">© 2026 • Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <!-- CARRINHO MODAL -->
     <div id="cart-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
         <div class="bg-zinc-900 rounded-3xl max-w-lg w-full mx-4 max-h-[90vh] overflow-auto border border-zinc-700">
             <div class="p-8">
@@ -76,7 +154,7 @@
                     <button onclick="toggleCart()" class="text-4xl text-zinc-400 hover:text-white">×</button>
                 </div>
                 <div id="modal-cart-items" class="space-y-6"></div>
-                
+               
                 <div class="mt-10 flex justify-between text-3xl font-bold">
                     <span>Total</span>
                     <span id="modal-total" class="text-violet-400">R$ 0,00</span>
@@ -91,14 +169,15 @@
     </div>
 
     <script>
-        // ==================== FIREBASE CONFIG ====================
+        // ==================== CONFIGURAÇÃO FIREBASE ATUALIZADA ====================
         const firebaseConfig = {
             apiKey: "AIzaSyCy1vh73wVCVG94jHDNMkYQYyiXXfHzHo0",
             authDomain: "data-base-dos-sites.firebaseapp.com",
             projectId: "data-base-dos-sites",
             storageBucket: "data-base-dos-sites.firebasestorage.app",
             messagingSenderId: "328520422607",
-            appId: "1:328520422607:web:e5d88712edafe5a71dd3ba"
+            appId: "1:328520422607:web:e5d88712edafe5a71dd3ba",
+            measurementId: "G-XCZK3CK3MW"
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -113,32 +192,33 @@
 
         let cart = [];
 
-        // Funções de produtos e carrinho (mantidas)
         function renderProducts() {
             const floresList = document.getElementById('flores-list');
             const pudinsList = document.getElementById('pudins-list');
             floresList.innerHTML = '';
             pudinsList.innerHTML = '';
-
             products.forEach(product => {
                 const div = document.createElement('div');
                 div.className = `product-card bg-zinc-800 rounded-3xl p-6 shadow-xl border border-zinc-700`;
                 div.innerHTML = `
                     <div class="relative">
-                        <img src="${product.img}" 
-                             class="product-img w-full h-56 object-cover mx-auto mb-6 rounded-2xl" 
+                        <img src="${product.img}"
+                             class="product-img w-full h-56 object-cover mx-auto mb-6 rounded-2xl"
                              alt="${product.name}"
                              onclick="addToCart(${product.id})">
                     </div>
                     <h4 class="font-semibold text-2xl mb-3 text-center">${product.name}</h4>
                     <p class="text-violet-400 text-3xl font-bold text-center mb-6">R$ ${product.price.toFixed(2)}</p>
-                    <button onclick="addToCart(${product.id}); event.stopImmediatePropagation()" 
+                    <button onclick="addToCart(${product.id}); event.stopImmediatePropagation()"
                             class="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white py-5 rounded-2xl font-semibold text-lg hover:brightness-110 transition">
                         Adicionar ao Carrinho
                     </button>
                 `;
-                if (product.category === 'flor') floresList.appendChild(div);
-                else pudinsList.appendChild(div);
+                if (product.category === 'flor') {
+                    floresList.appendChild(div);
+                } else {
+                    pudinsList.appendChild(div);
+                }
             });
         }
 
@@ -148,7 +228,7 @@
             cart.push({...product});
             updateCartCount();
             renderFormCart();
-            
+           
             const notif = document.createElement('div');
             notif.className = "fixed bottom-8 right-8 bg-green-600 text-white px-10 py-5 rounded-3xl shadow-2xl z-[300]";
             notif.innerHTML = `✅ ${product.name} adicionado!`;
@@ -165,13 +245,11 @@
             const totalEl = document.getElementById('total-price');
             container.innerHTML = '';
             let total = 0;
-
             if (cart.length === 0) {
                 container.innerHTML = `<p class="text-zinc-500 text-center py-12">Nenhum item ainda.<br>Clique nas fotos dos produtos acima.</p>`;
                 totalEl.textContent = 'R$ 0,00';
                 return;
             }
-
             cart.forEach((item, index) => {
                 total += item.price;
                 const div = document.createElement('div');
@@ -210,7 +288,7 @@
             const container = document.getElementById('modal-cart-items');
             container.innerHTML = '';
             let total = 0;
-            
+           
             cart.forEach((item, index) => {
                 total += item.price;
                 const div = document.createElement('div');
@@ -244,17 +322,16 @@
             document.getElementById('pedidos').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // ==================== ENVIAR PEDIDO (MELHORADO) ====================
         async function enviarPedido(e) {
             e.preventDefault();
-            
+           
             const nome = document.getElementById('nome').value.trim();
             const whatsapp = document.getElementById('whatsapp').value.trim();
             const endereco = document.getElementById('endereco').value.trim();
             const personalizacao = document.getElementById('personalizacao').value.trim() || "Sem observações";
 
-            if (cart.length === 0) return alert("❌ Adicione pelo menos um produto!");
-            if (!nome || !whatsapp || !endereco) return alert("❌ Preencha nome, WhatsApp e endereço!");
+            if (cart.length === 0) return alert("Adicione pelo menos um produto!");
+            if (!nome || !whatsapp || !endereco) return alert("Por favor, preencha nome, WhatsApp e endereço!");
 
             const novoPedido = {
                 data: new Date().toLocaleString('pt-BR'),
@@ -271,14 +348,14 @@
             try {
                 await db.collection("pedidos").add(novoPedido);
                 alert(`🎉 Pedido enviado com sucesso!\n\nEntraremos em contato pelo WhatsApp em breve.`);
-                
+               
                 document.getElementById('order-form').reset();
                 cart = [];
                 updateCartCount();
                 renderFormCart();
             } catch (error) {
-                console.error("Erro Firebase:", error);
-                alert("❌ Erro ao enviar pedido.\n\nVerifique as regras do Firestore (deve estar em modo teste).");
+                console.error(error);
+                alert("Erro ao enviar o pedido. Tente novamente.");
             }
         }
 

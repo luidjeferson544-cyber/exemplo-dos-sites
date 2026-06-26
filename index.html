@@ -181,15 +181,14 @@
     </div>
 
     <script>
-        // ==================== CONFIGURAÇÃO FIREBASE ATUALIZADA ====================
+        // ==================== FIREBASE CONFIG (CORRETA) ====================
         const firebaseConfig = {
             apiKey: "AIzaSyCy1vh73wVCVG94jHDNMkYQYyiXXfHzHo0",
             authDomain: "data-base-dos-sites.firebaseapp.com",
             projectId: "data-base-dos-sites",
             storageBucket: "data-base-dos-sites.firebasestorage.app",
             messagingSenderId: "328520422607",
-            appId: "1:328520422607:web:e5d88712edafe5a71dd3ba",
-            measurementId: "G-XCZK3CK3MW"
+            appId: "1:328520422607:web:e5d88712edafe5a71dd3ba"
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -337,6 +336,7 @@
             document.getElementById('pedidos').scrollIntoView({ behavior: 'smooth' });
         }
 
+        // ==================== FUNÇÃO CORRIGIDA ====================
         async function enviarPedido(e) {
             e.preventDefault();
             
@@ -345,8 +345,8 @@
             const endereco = document.getElementById('endereco').value.trim();
             const personalizacao = document.getElementById('personalizacao').value.trim() || "Sem observações";
 
-            if (cart.length === 0) return alert("Adicione pelo menos um produto!");
-            if (!nome || !whatsapp || !endereco) return alert("Por favor, preencha nome, WhatsApp e endereço!");
+            if (cart.length === 0) return alert("❌ Adicione pelo menos um produto!");
+            if (!nome || !whatsapp || !endereco) return alert("❌ Preencha nome, WhatsApp e endereço!");
 
             const novoPedido = {
                 data: new Date().toLocaleString('pt-BR'),
@@ -369,7 +369,8 @@
                 updateCartCount();
                 renderFormCart();
             } catch (error) {
-                alert("Erro ao enviar o pedido. Tente novamente.");
+                console.error("Erro:", error);
+                alert("❌ Erro ao enviar pedido.\n\nVerifique se o Firebase está configurado corretamente.");
             }
         }
 
